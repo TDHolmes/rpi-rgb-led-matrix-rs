@@ -139,7 +139,7 @@ extern {
     // fn led_matrix_swap_on_vsync(matrix: *mut RGBLedMatrix, canvas: *mut LedCanvas) -> *mut LedCanvas;
 
     // fn led_matrix_get_brightness(matrix: *mut RGBLedMatrix) -> u8;
-    // fn led_matrix_set_brightness(matrix: *mut RGBLedMatrix, brightness: u8);
+    fn led_matrix_set_brightness(matrix: *mut RGBLedMatrix, brightness: u8);
 
     // fn load_font(bdf_font_file: *const c_char) -> *mut LedFont;
     // fn delete_font(font: *mut LedFont);
@@ -159,6 +159,7 @@ fn main() {
     unsafe {
         let matrix_ptr = led_matrix_create(16, 2, 0);
         let canvas_ptr = led_matrix_get_canvas(matrix_ptr);
+        led_matrix_set_brightness(matrix_ptr, 255);
         draw_circle(canvas_ptr, 8, 8, 4, 255, 255, 255);
     }
     while 1 == 1 {
