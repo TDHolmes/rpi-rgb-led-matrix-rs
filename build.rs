@@ -12,7 +12,7 @@ fn main() {
 
     // Make it!
     eprintln!("Making...");
-    Command::new("make").status().unwrap();
+    Command::new("make").args(&["HARDWARE_DESC=adafruit-hat-pwm"]).status().unwrap();
 
     println!("cargo:rustc-link-search=native={}", rpi_rgb_out.as_path().display());
     println!("cargo:rustc-link-lib=static=rgbmatrix");
