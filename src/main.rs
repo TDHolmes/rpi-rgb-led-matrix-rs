@@ -123,7 +123,7 @@ pub struct RGBLedMatrixOptions {
 
 #[link(name = "rgbmatrix")]
 extern {
-    fn led_matrix_create_from_options(options: *mut RGBLedMatrixOptions, argc: *const c_int, argv: ***mut c_char) -> RGBLedMatrix;
+    // fn led_matrix_create_from_options(options: *mut RGBLedMatrixOptions, argc: *const c_int, argv: ***mut c_char) -> RGBLedMatrix;
     // fn led_matrix_print_flags(out: *mut FILE);
     fn led_matrix_create(rows: c_int, chained: c_int, parallel: c_int) -> *mut RGBLedMatrix;
     // fn led_matrix_delete(matrix: *mut RGBLedMatrix);
