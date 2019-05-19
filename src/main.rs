@@ -1,6 +1,7 @@
 extern crate libc;
-use libc::{c_int, c_char};  // , FILE};
 
+use libc::{c_int, c_char};  // , FILE};
+use std::ffi::CString;
 
 
 #[repr(C)]
@@ -112,7 +113,7 @@ pub struct RGBLedMatrixOptions {
     * anything if output enable is not connected to GPIO 18.
     * Corresponding flag: --led-hardware-pulse
     */
-    various_bitfield_options: c_int
+    various_bitfield_options: u8
     // unsigned disable_hardware_pulsing:1;
     // unsigned show_refresh_rate:1;  /* Corresponding flag: --led-show-refresh    */
     // // unsigned swap_green_blue:1; /* deprecated, use led_sequence instead */
@@ -122,7 +123,7 @@ pub struct RGBLedMatrixOptions {
 
 #[link(name = "rgbmatrix")]
 extern {
-    // fn led_matrix_create_from_options(options: *mut RGBLedMatrixOptions, argc: *const c_int, argv: ***mut c_char) -> RGBLedMatrix;
+    fn led_matrix_create_from_options(options: *mut RGBLedMatrixOptions, argc: *const c_int, argv: ***mut c_char) -> RGBLedMatrix;
     // fn led_matrix_print_flags(out: *mut FILE);
     fn led_matrix_create(rows: c_int, chained: c_int, parallel: c_int) -> *mut RGBLedMatrix;
     // fn led_matrix_delete(matrix: *mut RGBLedMatrix);
@@ -131,7 +132,7 @@ extern {
     // fn led_canvas_get_size(canvas: *const LedCanvas, width: *mut c_int, height: *mut c_int);
     // fn led_canvas_set_pixel(canvas: *mut LedCanvas, x: c_int, y: c_int, r: u8, g: u8, b: u8);
     // fn led_canvas_clear(canvas: *mut LedCanvas);
-    // fn led_canvas_fill(canvas: *mut LedCanvas, r: u8, g: u8, b: u8);
+    fn led_canvas_fill(canvas: *mut LedCanvas, r: u8, g: u8, b: u8);
 
     // /*** API to provide double-buffering. ***/
 
@@ -156,10 +157,33 @@ extern {
 }
 
 fn main() {
+    // let hardware_mapping = CString::new("adafruit-hat-pwm").expect("CString::new failed");
+    // let led_rgb_sequence = CString::new("RGB").expect("CString::new failed");
+    // let pixel_mapper_config = CString::new("").expect("CString::new failed");
+
+    // let config = RGBLedMatrixOptions {
+    //     hardware_mapping: hardware_mapping.as_ptr(),
+    //     rows: 16,
+    //     cols: 32,
+    //     chain_length: 2,
+    //     parallel: 0,
+    //     pwm_bits: 11,
+    //     pwm_lsb_nanoseconds: 130,
+    //     pwm_dither_bits: 0,
+    //     brightness: 255,
+    //     scan_mode: 0,
+    //     row_address_type: 0,
+    //     multiplexing: 1,
+    //     led_rgb_sequence: led_rgb_sequence.as_ptr(),
+    //     pixel_mapper_config: pixel_mapper_config.as_ptr(),
+    //     various_bitfield_options: 0
+    // };
+
     unsafe {
         let matrix_ptr = led_matrix_create(16, 2, 0);
         let canvas_ptr = led_matrix_get_canvas(matrix_ptr);
         led_matrix_set_brightness(matrix_ptr, 255);
+        // led_canvas_fill(canvas_ptr, 255, 255, 255);
         draw_circle(canvas_ptr, 8, 8, 4, 255, 255, 255);
     }
     while 1 == 1 {
