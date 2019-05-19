@@ -8,7 +8,7 @@ fn main() {
     // Move to the rpi-rgb-led-matrix library
     let rpi_rgb_path_root = Path::new("src/rpi-rgb-led-matrix/");
     let rpi_rgb_out = rpi_rgb_path_root.join("lib");
-    assert!(env::set_current_dir(&rpi_rgb_path_root).is_ok());
+    assert!(env::set_current_dir(&rpi_rgb_out).is_ok());
 
     // Make it!
     eprintln!("Making...");
@@ -16,4 +16,5 @@ fn main() {
 
     println!("cargo:rustc-link-search=native={}", rpi_rgb_out.as_path().display());
     println!("cargo:rustc-link-lib=static=rgbmatrix");
+    println!("cargo:rustc-flags=-l dylib=stdc++");
 }

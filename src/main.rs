@@ -1,5 +1,5 @@
 extern crate libc;
-use libc::{c_int, c_char, FILE};
+use libc::{c_int, c_char);  // , FILE};
 
 
 
@@ -9,8 +9,8 @@ struct RGBLedMatrix { _private: [u8; 0] }
 #[repr(C)]
 struct LedCanvas { _private: [u8; 0] }
 
-#[repr(C)]
-struct LedFont { _private: [u8; 0] }
+// #[repr(C)]
+// struct LedFont { _private: [u8; 0] }
 
 /**
  * Parameters to create a new matrix.
