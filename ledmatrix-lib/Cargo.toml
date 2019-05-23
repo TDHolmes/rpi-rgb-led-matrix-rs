@@ -1,0 +1,9 @@
+[package]
+name = "ledmatrix-lib"
+version = "0.1.0"
+authors = ["Tyler Holmes <tylerdanielholmes@gmail.com>"]
+edition = "2018"
+build = "build.rs"
+
+[dependencies]
+libc = "0.2"

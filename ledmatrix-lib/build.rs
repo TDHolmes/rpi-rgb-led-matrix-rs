@@ -6,7 +6,7 @@ use std::path::Path;
 
 fn main() {
     // Move to the rpi-rgb-led-matrix library
-    let rpi_rgb_path_root = Path::new("rpi-rgb-led-matrix/");
+    let rpi_rgb_path_root = Path::new("../rpi-rgb-led-matrix/").canonicalize().unwrap();
     let rpi_rgb_out = rpi_rgb_path_root.join("lib");
     assert!(env::set_current_dir(&rpi_rgb_out).is_ok());
 
