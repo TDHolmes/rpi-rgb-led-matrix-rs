@@ -238,7 +238,7 @@ impl Canvas {
  * Font
  */
 
-struct Font {
+pub struct Font {
     font: *mut c_api::LedFont,
 }
 
@@ -253,7 +253,7 @@ impl Font {
         }
 
         // make the object
-        let string = CString::new(*bdf_filepath.to_string_lossy().to_mut()).unwrap();
+        let string = CString::new(bdf_filepath.to_str().unwrap()).unwrap();
         unsafe {
             return Ok(Font {
                 font: c_api::load_font(string.as_ptr()),
