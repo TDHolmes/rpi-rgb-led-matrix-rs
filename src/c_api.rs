@@ -1,5 +1,5 @@
 extern crate libc;
-use libc::{c_char, c_int, FILE};
+use libc::{c_char, c_int};
 
 #[repr(C)]
 pub struct RGBLedMatrix {
@@ -135,7 +135,7 @@ extern "C" {
     ) -> *mut RGBLedMatrix;
     pub fn led_matrix_create(rows: c_int, chained: c_int, parallel: c_int) -> *mut RGBLedMatrix;
     pub fn led_matrix_delete(matrix: *mut RGBLedMatrix);
-    pub fn led_matrix_print_flags(out: *mut FILE);
+    // pub fn led_matrix_print_flags(out: *mut FILE);
 
     pub fn led_matrix_get_brightness(matrix: *mut RGBLedMatrix) -> u8;
     pub fn led_matrix_set_brightness(matrix: *mut RGBLedMatrix, brightness: u8);
