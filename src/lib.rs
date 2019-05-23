@@ -1,28 +1,31 @@
 mod c_api;
 
 extern crate libc;
-use libc::{c_void, c_char, c_int};
+use libc::{c_char, c_int};
 use std::ffi::CString;
-
+use std::path::Path;
 
 pub enum HardwareMapping {
     Regular = 0,
     AdafruitHat = 1,
-    AdafruitHatPWM = 2
+    AdafruitHatPWM = 2,
 }
 
 fn mapping_to_string(mapping: &HardwareMapping) -> *const c_char {
     match mapping {
-        HardwareMapping::Regular        => CString::new("regular").unwrap().as_ptr(),
-        HardwareMapping::AdafruitHat    => CString::new("adafruit-hat").unwrap().as_ptr(),
+        HardwareMapping::Regular => CString::new("regular").unwrap().as_ptr(),
+        HardwareMapping::AdafruitHat => CString::new("adafruit-hat").unwrap().as_ptr(),
         HardwareMapping::AdafruitHatPWM => CString::new("adafruit-hat-pwm").unwrap().as_ptr(),
     }
 }
 
 pub enum RGBSequence {
-    RGB = 0, RBG = 1,
-    GRB = 2, GBR = 3,
-    BGR = 4, BRG = 5
+    RGB = 0,
+    RBG = 1,
+    GRB = 2,
+    GBR = 3,
+    BGR = 4,
+    BRG = 5,
 }
 
 fn sequence_to_string(sequence: &RGBSequence) -> *const c_char {
@@ -38,7 +41,7 @@ fn sequence_to_string(sequence: &RGBSequence) -> *const c_char {
 
 pub struct Matrix {
     matrix: *mut c_api::RGBLedMatrix,
-    pub options: LEDMatrixOptions
+    // pub options: LEDMatrixOptions,
 }
 
 pub struct Canvas {
@@ -61,26 +64,29 @@ pub struct LEDMatrixOptions {
     led_rgb_sequence: RGBSequence,
 }
 
+/*
+ * Matrix
+ */
 
 impl Matrix {
     pub fn new_from_options(options: &LEDMatrixOptions) -> Matrix {
         // build up the C struct of options from our options
         let mut c_options = c_api::RGBLedMatrixOptions {
-            hardware_mapping : mapping_to_string(&options.mapping),
-            rows : options.rows,
-            cols : options.cols,
-            chain_length : options.chain_length,
-            parallel : options.parallel,
-            pwm_bits : options.pwm_bits,
-            pwm_lsb_nanoseconds : options.pwm_lsb_nanoseconds,
-            pwm_dither_bits : options.pwm_dither_bits,
-            brightness : options.brightness,
-            scan_mode : options.scan_mode,
-            row_address_type : options.row_address_type,
-            multiplexing : options.multiplexing,
-            led_rgb_sequence : sequence_to_string(&options.led_rgb_sequence),
-            pixel_mapper_config : CString::new("").unwrap().as_ptr(),
-            various_bitfield_options: 0
+            hardware_mapping: mapping_to_string(&options.mapping),
+            rows: options.rows,
+            cols: options.cols,
+            chain_length: options.chain_length,
+            parallel: options.parallel,
+            pwm_bits: options.pwm_bits,
+            pwm_lsb_nanoseconds: options.pwm_lsb_nanoseconds,
+            pwm_dither_bits: options.pwm_dither_bits,
+            brightness: options.brightness,
+            scan_mode: options.scan_mode,
+            row_address_type: options.row_address_type,
+            multiplexing: options.multiplexing,
+            led_rgb_sequence: sequence_to_string(&options.led_rgb_sequence),
+            pixel_mapper_config: CString::new("").unwrap().as_ptr(),
+            various_bitfield_options: 0,
         };
 
         // put in dummy values for these unused variables. argv isn't even the right format,
@@ -92,8 +98,7 @@ impl Matrix {
             let m = c_api::led_matrix_create_from_options(&mut c_options, &argc, argv);
 
             Matrix {
-                matrix : m,
-                options: *options
+                matrix: m,
             }
         }
     }
@@ -102,16 +107,12 @@ impl Matrix {
         unsafe {
             let m: *mut c_api::RGBLedMatrix = c_api::led_matrix_create(rows, chained, parallel);
 
-            Matrix {
-                matrix: m
-            }
+            Matrix { matrix: m }
         }
     }
 
     pub fn get_brightness(&mut self) -> u8 {
-        unsafe {
-            c_api::led_matrix_get_brightness(self.matrix)
-        }
+        unsafe { c_api::led_matrix_get_brightness(self.matrix) }
     }
 
     pub fn set_brightness(&mut self, brightness: u8) {
@@ -121,20 +122,21 @@ impl Matrix {
     }
 
     pub fn get_canvas(&mut self) -> Canvas {
-        unsafe {
-            Canvas::new(c_api::led_matrix_get_canvas(self.matrix))
-        }
+        unsafe { Canvas::new(c_api::led_matrix_get_canvas(self.matrix)) }
     }
 
     pub fn create_offscreen_canvas(&mut self) -> Canvas {
-        unsafe {
-            Canvas::new(c_api::led_matrix_create_offscreen_canvas(self.matrix))
-        }
+        unsafe { Canvas::new(c_api::led_matrix_create_offscreen_canvas(self.matrix)) }
     }
 
-    pub fn swap_canvas_on_vsync(&mut self, canvas_to_draw: &mut Canvas, new_offscreen_canvas: &mut Canvas) {
+    pub fn swap_canvas_on_vsync(
+        &mut self,
+        canvas_to_draw: &mut Canvas,
+        new_offscreen_canvas: &mut Canvas,
+    ) {
         unsafe {
-            new_offscreen_canvas.canvas = c_api::led_matrix_swap_on_vsync(self.matrix, canvas_to_draw.canvas);
+            new_offscreen_canvas.canvas =
+                c_api::led_matrix_swap_on_vsync(self.matrix, canvas_to_draw.canvas);
         }
     }
 }
@@ -147,11 +149,13 @@ impl Drop for Matrix {
     }
 }
 
+/*
+ * Canvas
+ */
+
 impl Canvas {
     fn new(canvas_ref: *mut c_api::LedCanvas) -> Canvas {
-        Canvas {
-            canvas: canvas_ref
-        }
+        Canvas { canvas: canvas_ref }
     }
 
     pub fn get_size(&self) -> (i32, i32) {
@@ -162,7 +166,7 @@ impl Canvas {
             c_api::led_canvas_get_size(self.canvas, width as *mut c_int, height as *mut c_int);
         }
 
-        return (width, height)
+        return (width, height);
     }
 
     pub fn clear(&mut self) {
@@ -195,14 +199,73 @@ impl Canvas {
         }
     }
 
-    // pub fn draw_text(
-    //     c: *mut LedCanvas, font: *mut LedFont, x: c_int, y: c_int,
-    //     r: u8, g: u8, b: u8,
-    //     utf8_text: *const c_char, kerning_offset: c_int) -> c_int;
+    pub fn draw_text(
+        &mut self,
+        font: &mut Font,
+        x: i32,
+        y: i32,
+        r: u8,
+        g: u8,
+        b: u8,
+        utf8_text: &str,
+        kerning_offset: i32,
+    ) {
+        let cstr = CString::new(utf8_text).unwrap().as_ptr();
+        unsafe {
+            c_api::draw_text(self.canvas, font.font, x, y, r, g, b, cstr, kerning_offset);
+        }
+    }
 
-    // pub fn vertical_draw_text(
-    //     c: *mut LedCanvas, font: *mut LedFont, x: c_int, y: c_int,
-    //     r: u8, g: u8, b: u8,
-    //     utf8_text: *const c_char, kerning_offset: c_int) -> c_int;
+    pub fn vertical_draw_text(
+        &mut self,
+        font: &mut Font,
+        x: i32,
+        y: i32,
+        r: u8,
+        g: u8,
+        b: u8,
+        utf8_text: &str,
+        kerning_offset: i32,
+    ) {
+        let cstr = CString::new(utf8_text).unwrap().as_ptr();
+        unsafe {
+            c_api::vertical_draw_text(self.canvas, font.font, x, y, r, g, b, cstr, kerning_offset);
+        }
+    }
+}
 
+/*
+ * Font
+ */
+
+struct Font {
+    font: *mut c_api::LedFont,
+}
+
+impl Font {
+    pub fn new(bdf_filepath: &Path) -> Result<Font, &'static str> {
+        // validate path
+        if !bdf_filepath.ends_with(Path::new(".bdf")) {
+            return Err("Filepath does not appear to be a .bdf file!");
+        }
+        if !bdf_filepath.exists() {
+            return Err("Filepath does not appear to exist!");
+        }
+
+        // make the object
+        let string = CString::new(*bdf_filepath.to_string_lossy().to_mut()).unwrap();
+        unsafe {
+            return Ok(Font {
+                font: c_api::load_font(string.as_ptr()),
+            });
+        }
+    }
+}
+
+impl Drop for Font {
+    fn drop(&mut self) {
+        unsafe {
+            c_api::delete_font(self.font);
+        }
+    }
 }
