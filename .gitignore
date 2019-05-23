@@ -1,2 +1,7 @@
+# rust
 /target
 **/*.rs.bk
+
+# misc
+*.DS_Store
+.vscode
