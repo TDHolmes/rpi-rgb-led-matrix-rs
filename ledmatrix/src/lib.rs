@@ -64,6 +64,32 @@ pub struct LEDMatrixOptions {
     led_rgb_sequence: RGBSequence,
 }
 
+impl LEDMatrixOptions {
+    pub fn new(
+        mapping: HardwareMapping,
+        rows: i32,
+        cols: i32,
+        chain_length: i32,
+        parallel: i32
+    ) -> LEDMatrixOptions {
+        LEDMatrixOptions {
+            mapping: mapping,
+            rows: rows,
+            cols: cols,
+            chain_length: chain_length,
+            parallel: parallel,
+            pwm_bits: 0,
+            pwm_lsb_nanoseconds: 0,
+            pwm_dither_bits: 0,
+            brightness: 0,
+            scan_mode: 0,
+            row_address_type: 0,
+            multiplexing: 0,
+            led_rgb_sequence: RGBSequence::RGB,
+        }
+    }
+}
+
 /*
  * Matrix
  */

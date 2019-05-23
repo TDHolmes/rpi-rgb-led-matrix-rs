@@ -1,6 +1,7 @@
 [workspace]
 
+
 members = [
-    "ledmatrix-lib",
-    # "ledmatrix-example",
+    "ledmatrix",
+    "ledmatrix-example",
 ]
