@@ -159,12 +159,12 @@ impl Matrix {
             various_bitfield_options: 0,
         };
 
-        let (argc, mut argv) = helper_functions::get_c_argc_argv();
+        let (argc, argv) = helper_functions::get_c_argc_argv();
 
         unsafe {
             println!("Arguments:");
             for i in 0..argc {
-                let val: *const c_char = argv[i as usize];
+                let val: *const c_char = *argv.offset(i as isize);
                 let mut offs = 0;
 
                 print!("\t@{:?} - ", val);
@@ -175,7 +175,7 @@ impl Matrix {
                 println!("");
             }
 
-            let m = c_api::led_matrix_create_from_options(&mut c_options, &argc, argv.as_mut_ptr());
+            let m = c_api::led_matrix_create_from_options(&mut c_options, &argc, &argv as *const*const*const c_char);
 
             Matrix {
                 matrix: m,

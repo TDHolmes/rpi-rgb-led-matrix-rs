@@ -5,7 +5,7 @@ use std::ffi::CString;
 use libc::c_char;
 
 
-pub fn get_c_argc_argv() -> (i32, [*const c_char; 128]) {
+pub fn get_c_argc_argv() -> (i32, *const*const c_char) {
     // Prints each argument on a separate line
     let mut argv: [*const c_char; 128] = [CString::new("").unwrap().into_raw(); 128];
     let mut argc = 0;
@@ -16,5 +16,5 @@ pub fn get_c_argc_argv() -> (i32, [*const c_char; 128]) {
         argv[ind] = CString::new(argument).unwrap().into_raw();
     }
 
-    (argc, argv)
+    (argc, argv.as_ptr())
 }
