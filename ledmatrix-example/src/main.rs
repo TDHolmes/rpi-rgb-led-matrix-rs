@@ -32,7 +32,7 @@ fn main() {
                 COLS - x, ROWS,
                 0x80, 0x80, 0x80);
             matrix.swap_canvas_on_vsync(&mut main_canvas, &mut aux_canvas);
-            sleep(Duration::from_millis(50));
+            sleep(Duration::from_millis(25));
         }
         for y in 1..=ROWS {
             aux_canvas.clear();
@@ -41,7 +41,7 @@ fn main() {
                 0,    ROWS - y,
                 0x80, 0x80, 0x80);
             matrix.swap_canvas_on_vsync(&mut main_canvas, &mut aux_canvas);
-            sleep(Duration::from_millis(50));
+            sleep(Duration::from_millis(25));
         }
 
         for x in 1..=COLS {
@@ -51,7 +51,7 @@ fn main() {
                 x,        0,
                 0x80, 0x80, 0x80);
             matrix.swap_canvas_on_vsync(&mut main_canvas, &mut aux_canvas);
-            sleep(Duration::from_millis(50));
+            sleep(Duration::from_millis(25));
         }
         for y in 1..=ROWS {
             aux_canvas.clear();
@@ -60,7 +60,7 @@ fn main() {
                 COLS, y,
                 0x80, 0x80, 0x80);
             matrix.swap_canvas_on_vsync(&mut main_canvas, &mut aux_canvas);
-            sleep(Duration::from_millis(50));
+            sleep(Duration::from_millis(25));
         }
     }
 }
