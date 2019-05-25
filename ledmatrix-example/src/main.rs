@@ -10,6 +10,7 @@ fn main() {
         AdafruitHatPWM,
         16, 32,
         1, 0,
+        50
     );
 
     let mut matrix = Matrix::new_from_options(&options);
