@@ -167,9 +167,9 @@ impl Matrix {
                 let val: *const c_char = argv[i as usize];
                 let mut offs = 0;
 
-                print!("\t");
+                print!("\t@{:?} - ", val);
                 while *val.offset(offs) != 0 {
-                    print!("{:?}", *val.offset(offs) as u8 as char);
+                    print!("{}", *val.offset(offs) as u8 as char);
                     offs += 1;
                 }
                 println!("");
