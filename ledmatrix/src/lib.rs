@@ -57,9 +57,11 @@ pub struct LEDMatrixOptions {
     pwm_bits: i32,
     pwm_lsb_nanoseconds: i32,
     pwm_dither_bits: i32,
-    brightness: i32,
+    brightness: u8,
     scan_mode: i32,
     row_address_type: i32,
+    // TODO: add enum of multitplexing types?
+    //   0=direct; 1=strip; 2=checker; 3=spiral; 4=Z-strip
     multiplexing: i32,
     led_rgb_sequence: RGBSequence,
 }
@@ -70,7 +72,8 @@ impl LEDMatrixOptions {
         rows: i32,
         cols: i32,
         chain_length: i32,
-        parallel: i32
+        parallel: i32,
+        brightness: u8
     ) -> LEDMatrixOptions {
         LEDMatrixOptions {
             mapping: mapping,
@@ -78,10 +81,10 @@ impl LEDMatrixOptions {
             cols: cols,
             chain_length: chain_length,
             parallel: parallel,
-            pwm_bits: 0,
-            pwm_lsb_nanoseconds: 0,
+            brightness: brightness,
+            pwm_bits: 11,
+            pwm_lsb_nanoseconds: 130,
             pwm_dither_bits: 0,
-            brightness: 0,
             scan_mode: 0,
             row_address_type: 0,
             multiplexing: 0,
@@ -106,7 +109,7 @@ impl Matrix {
             pwm_bits: options.pwm_bits,
             pwm_lsb_nanoseconds: options.pwm_lsb_nanoseconds,
             pwm_dither_bits: options.pwm_dither_bits,
-            brightness: options.brightness,
+            brightness: options.brightness as i32,
             scan_mode: options.scan_mode,
             row_address_type: options.row_address_type,
             multiplexing: options.multiplexing,
