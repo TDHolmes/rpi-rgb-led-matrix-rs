@@ -139,7 +139,11 @@ impl Matrix {
                 println!("'");
             }
 
-            let m = c_api::led_matrix_create_from_options(&mut c_options, &argc, &argv as *const*const*const c_char);
+            let m = c_api::led_matrix_create_from_options(
+                &mut c_options,
+                &(argc as c_int),
+                &argv as *const*const*const c_char
+            );
 
             Matrix {
                 matrix: m,
