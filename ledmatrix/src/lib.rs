@@ -16,19 +16,19 @@ impl HardwareMapping {
     pub fn to_string(&self) -> *const c_char {
         match self {
             HardwareMapping::Regular => {
-                let val = CString::new("regular").unwrap();
-                println!("HardwareMapping: {:?}", val);
-                val.as_ptr()
+                let val = CString::new("regular").unwrap().into_raw();
+                unsafe { println!("HardwareMapping: {:?}", *val); }
+                val
             },
             HardwareMapping::AdafruitHat => {
-                let val = CString::new("adafruit-hat").unwrap();
-                println!("HardwareMapping: {:?}", val);
-                val.as_ptr()
+                let val = CString::new("adafruit-hat").unwrap().into_raw();
+                unsafe { println!("HardwareMapping: {:?}", *val); }
+                val
             },
             HardwareMapping::AdafruitHatPWM => {
-                let val = CString::new("adafruit-hat-pwm").unwrap();
-                println!("HardwareMapping: {:?}", val);
-                val.as_ptr()
+                let val = CString::new("adafruit-hat-pwm").unwrap().into_raw();
+                unsafe { println!("HardwareMapping: {:?}", *val); }
+                val
             },
         }
     }
@@ -47,34 +47,34 @@ impl RGBSequence {
     pub fn to_string(&self) -> *const c_char {
         match self {
             RGBSequence::RGB => {
-                let val = CString::new("RGB").unwrap();
-                println!("RGBSequence str: {:?}", val);
-                val.as_ptr()
+                let val = CString::new("RGB").unwrap().into_raw();
+                unsafe { println!("RGBSequence str: {:?}", *val); }
+                val
             },
             RGBSequence::RBG => {
-                let val = CString::new("RBG").unwrap();
-                println!("RGBSequence str: {:?}", val);
-                val.as_ptr()
+                let val = CString::new("RBG").unwrap().into_raw();
+                unsafe { println!("RGBSequence str: {:?}", *val); }
+                val
             },
             RGBSequence::GRB => {
-                let val = CString::new("GRB").unwrap();
-                println!("RGBSequence str: {:?}", val);
-                val.as_ptr()
+                let val = CString::new("GRB").unwrap().into_raw();
+                unsafe { println!("RGBSequence str: {:?}", *val); }
+                val
             },
             RGBSequence::GBR => {
-                let val = CString::new("GBR").unwrap();
-                println!("RGBSequence str: {:?}", val);
-                val.as_ptr()
+                let val = CString::new("GBR").unwrap().into_raw();
+                unsafe { println!("RGBSequence str: {:?}", *val); }
+                val
             },
             RGBSequence::BGR => {
-                let val = CString::new("BGR").unwrap();
-                println!("RGBSequence str: {:?}", val);
-                val.as_ptr()
+                let val = CString::new("BGR").unwrap().into_raw();
+                unsafe { println!("RGBSequence str: {:?}", *val); }
+                val
             },
             RGBSequence::BRG => {
-                let val = CString::new("BRG").unwrap();
-                println!("RGBSequence str: {:?}", val);
-                val.as_ptr()
+                let val = CString::new("BRG").unwrap().into_raw();
+                unsafe { println!("RGBSequence str: {:?}", *val); }
+                val
             },
         }
     }
