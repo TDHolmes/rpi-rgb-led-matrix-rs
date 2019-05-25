@@ -161,12 +161,20 @@ impl Matrix {
 
         let (argc, mut argv) = helper_functions::get_c_argc_argv();
 
-        println!("Arguments:");
-        for i in 0..argc {
-            println!("\t{:?}", argv[i as usize]);
-        }
-
         unsafe {
+            println!("Arguments:");
+            for i in 0..argc {
+                let val: *const i8 = argv[i as usize];
+                let mut offs = 0;
+
+                print!("\t");
+                while *val.offset(offs) != 0 {
+                    print!("{:?}", *val.offset(offs) as u8 as char);
+                    offs += 1;
+                }
+                println!("");
+            }
+
             let m = c_api::led_matrix_create_from_options(&mut c_options, &argc, argv.as_mut_ptr());
 
             Matrix {
