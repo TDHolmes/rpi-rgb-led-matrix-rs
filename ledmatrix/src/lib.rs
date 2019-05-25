@@ -13,7 +13,7 @@ pub enum HardwareMapping {
 }
 
 impl HardwareMapping {
-    fn to_string(&self) -> *const c_char {
+    pub fn to_string(&self) -> *const c_char {
         match self {
             HardwareMapping::Regular => {
                 let val = CString::new("regular").unwrap();
@@ -44,7 +44,7 @@ pub enum RGBSequence {
 }
 
 impl RGBSequence {
-    fn to_string(&self) -> *const c_char {
+    pub fn to_string(&self) -> *const c_char {
         match self {
             RGBSequence::RGB => {
                 let val = CString::new("RGB").unwrap();
@@ -162,8 +162,8 @@ impl Matrix {
         let (argc, argv) = helper_functions::get_c_argc_argv();
 
         unsafe {
-            println!("hardware_mapping: {:?}", *c_options.hardware_mapping);
-            println!("led_rgb_sequence: {:?}", *c_options.led_rgb_sequence);
+            println!("hardware_mapping: {:?}", c_options.hardware_mapping);
+            println!("led_rgb_sequence: {:?}", c_options.led_rgb_sequence);
             let m = c_api::led_matrix_create_from_options(&mut c_options, &argc, argv.as_ptr());
 
             Matrix {
