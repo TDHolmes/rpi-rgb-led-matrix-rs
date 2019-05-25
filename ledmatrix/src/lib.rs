@@ -158,10 +158,12 @@ impl Matrix {
             pixel_mapper_config: CString::new("").unwrap().as_ptr(),
             various_bitfield_options: 0,
         };
-
+        
         let (argc, argv) = helper_functions::get_c_argc_argv();
 
         unsafe {
+            println!("hardware_mapping: {:?}", *hardware_mapping);
+            println!("led_rgb_sequence: {:?}", *c_options.led_rgb_sequence);
             let m = c_api::led_matrix_create_from_options(&mut c_options, &argc, argv.as_ptr());
 
             Matrix {
