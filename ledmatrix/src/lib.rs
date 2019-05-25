@@ -164,7 +164,7 @@ impl Matrix {
         unsafe {
             println!("Arguments:");
             for i in 0..argc {
-                let val: *const i8 = argv[i as usize];
+                let val: *const c_char = argv[i as usize];
                 let mut offs = 0;
 
                 print!("\t");
