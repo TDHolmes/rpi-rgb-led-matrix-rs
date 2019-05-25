@@ -19,8 +19,8 @@ fn main() {
     while 1 == 1 {
         for i in 0..16 {
             main_canvas.clear();
-            main_canvas.draw_line(i*2, i, 32 - i*2, 16-i, 0x80, 0x80, 0x80);
-            sleep(Duration::new(1, 0));
+            main_canvas.draw_line(i*2, 0, 32 - i*2, 16, 0x80, 0x80, 0x80);
+            sleep(Duration::new(0, 250000000));  // 0.25s
         }
     }
 }
