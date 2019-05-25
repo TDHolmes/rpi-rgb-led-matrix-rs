@@ -9,7 +9,7 @@ fn main() {
     let options = LEDMatrixOptions::new(
         AdafruitHatPWM,
         16, 32,
-        1, 0,
+        2, 0,
         50
     );
 
