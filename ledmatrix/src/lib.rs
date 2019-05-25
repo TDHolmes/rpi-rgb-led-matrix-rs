@@ -155,10 +155,10 @@ impl Matrix {
             row_address_type: options.row_address_type,
             multiplexing: options.multiplexing,
             led_rgb_sequence: options.led_rgb_sequence.to_string(),
-            pixel_mapper_config: CString::new("").unwrap().as_ptr(),
+            pixel_mapper_config: CString::new("").unwrap().into_raw(),
             various_bitfield_options: 0,
         };
-        
+
         let (argc, argv) = helper_functions::get_c_argc_argv();
 
         unsafe {
