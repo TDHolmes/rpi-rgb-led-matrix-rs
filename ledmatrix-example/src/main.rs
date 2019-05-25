@@ -25,6 +25,7 @@ fn main() {
                 32 - x, 16,
                 0x80, 0x80, 0x80);
             matrix.swap_canvas_on_vsync(&mut main_canvas, &mut aux_canvas);
+            sleep(Duration::from_millis(50));
         }
         for y in 0..16 {
             aux_canvas.clear();
@@ -33,6 +34,7 @@ fn main() {
                 0, 16 - y,
                 0x80, 0x80, 0x80);
             matrix.swap_canvas_on_vsync(&mut main_canvas, &mut aux_canvas);
+            sleep(Duration::from_millis(50));
         }
 
         for x in (0..32).step_by(2) {
@@ -42,6 +44,7 @@ fn main() {
                 x,      0,
                 0x80, 0x80, 0x80);
             matrix.swap_canvas_on_vsync(&mut main_canvas, &mut aux_canvas);
+            sleep(Duration::from_millis(50));
         }
         for y in 0..16 {
             aux_canvas.clear();
@@ -50,6 +53,7 @@ fn main() {
                 32, y,
                 0x80, 0x80, 0x80);
             matrix.swap_canvas_on_vsync(&mut main_canvas, &mut aux_canvas);
+            sleep(Duration::from_millis(50));
         }
     }
 }
