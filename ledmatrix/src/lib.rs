@@ -15,21 +15,9 @@ pub enum HardwareMapping {
 impl HardwareMapping {
     pub fn to_string(&self) -> *const c_char {
         match self {
-            HardwareMapping::Regular => {
-                let val = CString::new("regular").unwrap().into_raw();
-                unsafe { println!("HardwareMapping: {:?}", *val); }
-                val
-            },
-            HardwareMapping::AdafruitHat => {
-                let val = CString::new("adafruit-hat").unwrap().into_raw();
-                unsafe { println!("HardwareMapping: {:?}", *val); }
-                val
-            },
-            HardwareMapping::AdafruitHatPWM => {
-                let val = CString::new("adafruit-hat-pwm").unwrap().into_raw();
-                unsafe { println!("HardwareMapping: {:?}", *val); }
-                val
-            },
+            HardwareMapping::Regular => CString::new("regular").unwrap().into_raw(),
+            HardwareMapping::AdafruitHat => CString::new("adafruit-hat").unwrap().into_raw(),
+            HardwareMapping::AdafruitHatPWM => CString::new("adafruit-hat-pwm").unwrap().into_raw(),
         }
     }
 }
@@ -46,36 +34,12 @@ pub enum RGBSequence {
 impl RGBSequence {
     pub fn to_string(&self) -> *const c_char {
         match self {
-            RGBSequence::RGB => {
-                let val = CString::new("RGB").unwrap().into_raw();
-                unsafe { println!("RGBSequence str: {:?}", *val); }
-                val
-            },
-            RGBSequence::RBG => {
-                let val = CString::new("RBG").unwrap().into_raw();
-                unsafe { println!("RGBSequence str: {:?}", *val); }
-                val
-            },
-            RGBSequence::GRB => {
-                let val = CString::new("GRB").unwrap().into_raw();
-                unsafe { println!("RGBSequence str: {:?}", *val); }
-                val
-            },
-            RGBSequence::GBR => {
-                let val = CString::new("GBR").unwrap().into_raw();
-                unsafe { println!("RGBSequence str: {:?}", *val); }
-                val
-            },
-            RGBSequence::BGR => {
-                let val = CString::new("BGR").unwrap().into_raw();
-                unsafe { println!("RGBSequence str: {:?}", *val); }
-                val
-            },
-            RGBSequence::BRG => {
-                let val = CString::new("BRG").unwrap().into_raw();
-                unsafe { println!("RGBSequence str: {:?}", *val); }
-                val
-            },
+            RGBSequence::RGB => CString::new("RGB").unwrap().into_raw(),
+            RGBSequence::RBG => CString::new("RBG").unwrap().into_raw(),
+            RGBSequence::GRB => CString::new("GRB").unwrap().into_raw(),
+            RGBSequence::GBR => CString::new("GBR").unwrap().into_raw(),
+            RGBSequence::BGR => CString::new("BGR").unwrap().into_raw(),
+            RGBSequence::BRG => CString::new("BRG").unwrap().into_raw(),
         }
     }
 }
@@ -167,12 +131,12 @@ impl Matrix {
                 let val: *const c_char = *argv.offset(i as isize);
                 let mut offs = 0;
 
-                print!("\t@{:?} - ", val);
+                print!("\t@{:?} - '", val);
                 while *val.offset(offs) != 0 {
                     print!("{}", *val.offset(offs) as u8 as char);
                     offs += 1;
                 }
-                println!("");
+                println!("'");
             }
 
             let m = c_api::led_matrix_create_from_options(&mut c_options, &argc, &argv as *const*const*const c_char);
