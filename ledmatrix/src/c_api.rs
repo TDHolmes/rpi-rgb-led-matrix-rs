@@ -1,5 +1,13 @@
 extern crate libc;
+
+use std::env;
+use std::ffi::CString;
 use libc::{c_char, c_int};
+
+
+/*
+ * The C LED Matrix API
+ */
 
 #[repr(C)]
 pub struct RGBLedMatrix {
@@ -131,7 +139,7 @@ extern "C" {
     pub fn led_matrix_create_from_options(
         options: *mut RGBLedMatrixOptions,
         argc: *const c_int,
-        argv_unused: *const c_char,
+        argv: *const *const c_char,
     ) -> *mut RGBLedMatrix;
     pub fn led_matrix_create(rows: c_int, chained: c_int, parallel: c_int) -> *mut RGBLedMatrix;
     pub fn led_matrix_delete(matrix: *mut RGBLedMatrix);

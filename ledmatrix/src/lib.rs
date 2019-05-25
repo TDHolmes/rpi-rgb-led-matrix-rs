@@ -1,4 +1,5 @@
 mod c_api;
+mod helper_functions;
 
 extern crate libc;
 use libc::{c_char, c_int};
@@ -11,11 +12,13 @@ pub enum HardwareMapping {
     AdafruitHatPWM = 2,
 }
 
-fn mapping_to_string(mapping: &HardwareMapping) -> *const c_char {
-    match mapping {
-        HardwareMapping::Regular => CString::new("regular").unwrap().as_ptr(),
-        HardwareMapping::AdafruitHat => CString::new("adafruit-hat").unwrap().as_ptr(),
-        HardwareMapping::AdafruitHatPWM => CString::new("adafruit-hat-pwm").unwrap().as_ptr(),
+impl HardwareMapping {
+    fn to_string(&self) -> *const c_char {
+        match self {
+            HardwareMapping::Regular => CString::new("regular").unwrap().as_ptr(),
+            HardwareMapping::AdafruitHat => CString::new("adafruit-hat").unwrap().as_ptr(),
+            HardwareMapping::AdafruitHatPWM => CString::new("adafruit-hat-pwm").unwrap().as_ptr(),
+        }
     }
 }
 
@@ -28,14 +31,16 @@ pub enum RGBSequence {
     BRG = 5,
 }
 
-fn sequence_to_string(sequence: &RGBSequence) -> *const c_char {
-    match sequence {
-        RGBSequence::RGB => CString::new("RGB").unwrap().as_ptr(),
-        RGBSequence::RBG => CString::new("RBG").unwrap().as_ptr(),
-        RGBSequence::GRB => CString::new("GRB").unwrap().as_ptr(),
-        RGBSequence::GBR => CString::new("GBR").unwrap().as_ptr(),
-        RGBSequence::BGR => CString::new("BGR").unwrap().as_ptr(),
-        RGBSequence::BRG => CString::new("BRG").unwrap().as_ptr(),
+impl RGBSequence {
+    fn to_string(&self) -> *const c_char {
+        match self {
+            RGBSequence::RGB => CString::new("RGB").unwrap().as_ptr(),
+            RGBSequence::RBG => CString::new("RBG").unwrap().as_ptr(),
+            RGBSequence::GRB => CString::new("GRB").unwrap().as_ptr(),
+            RGBSequence::GBR => CString::new("GBR").unwrap().as_ptr(),
+            RGBSequence::BGR => CString::new("BGR").unwrap().as_ptr(),
+            RGBSequence::BRG => CString::new("BRG").unwrap().as_ptr(),
+        }
     }
 }
 
@@ -101,7 +106,7 @@ impl Matrix {
     pub fn new_from_options(options: &LEDMatrixOptions) -> Matrix {
         // build up the C struct of options from our options
         let mut c_options = c_api::RGBLedMatrixOptions {
-            hardware_mapping: mapping_to_string(&options.mapping),
+            hardware_mapping: options.mapping.to_string(),
             rows: options.rows,
             cols: options.cols,
             chain_length: options.chain_length,
@@ -113,18 +118,15 @@ impl Matrix {
             scan_mode: options.scan_mode,
             row_address_type: options.row_address_type,
             multiplexing: options.multiplexing,
-            led_rgb_sequence: sequence_to_string(&options.led_rgb_sequence),
+            led_rgb_sequence: options.led_rgb_sequence.to_string(),
             pixel_mapper_config: CString::new("").unwrap().as_ptr(),
             various_bitfield_options: 0,
         };
 
-        // put in dummy values for these unused variables. argv isn't even the right format,
-        //   so don't even try.
-        let argc: c_int = 0;
-        let argv: *const c_char = CString::new("").unwrap().as_ptr();
+        let (argc, argv) = helper_functions::get_c_argc_argv();
 
         unsafe {
-            let m = c_api::led_matrix_create_from_options(&mut c_options, &argc, argv);
+            let m = c_api::led_matrix_create_from_options(&mut c_options, &argc, argv.as_ptr());
 
             Matrix {
                 matrix: m,
