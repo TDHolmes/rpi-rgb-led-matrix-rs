@@ -33,19 +33,20 @@ fn main() {
                 0x80, 0x80, 0x80);
             sleep(Duration::new(0, 100000000));  // 0.1s
         }
+
         for x in 0..16 {
             main_canvas.clear();
             main_canvas.draw_line(
-                32 - x*2, 0,
-                x*2, 16,
+                32 - x*2, 16,
+                x*2, 0,
                 0x80, 0x80, 0x80);
             sleep(Duration::new(0, 100000000));  // 0.1s
         }
         for y in 0..16 {
             main_canvas.clear();
             main_canvas.draw_line(
-                0, y,
-                32, 16 - y,
+                0, 16 - y,
+                32, y,
                 0x80, 0x80, 0x80);
             sleep(Duration::new(0, 100000000));  // 0.1s
         }
