@@ -18,6 +18,7 @@ fn main() {
 
     while 1 == 1 {
         for i in 0..16 {
+            main_canvas.clear();
             main_canvas.draw_line(i*2, i, 32 - i*2, 16-i, 0x80, 0x80, 0x80);
             sleep(Duration::new(1, 0));
         }
