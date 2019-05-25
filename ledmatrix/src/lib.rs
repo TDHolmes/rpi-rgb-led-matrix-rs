@@ -15,9 +15,21 @@ pub enum HardwareMapping {
 impl HardwareMapping {
     fn to_string(&self) -> *const c_char {
         match self {
-            HardwareMapping::Regular => CString::new("regular").unwrap().as_ptr(),
-            HardwareMapping::AdafruitHat => CString::new("adafruit-hat").unwrap().as_ptr(),
-            HardwareMapping::AdafruitHatPWM => CString::new("adafruit-hat-pwm").unwrap().as_ptr(),
+            HardwareMapping::Regular => {
+                let val = CString::new("regular").unwrap();
+                println!("HardwareMapping: {:?}", val);
+                val.as_ptr()
+            },
+            HardwareMapping::AdafruitHat => {
+                let val = CString::new("adafruit-hat").unwrap();
+                println!("HardwareMapping: {:?}", val);
+                val.as_ptr()
+            },
+            HardwareMapping::AdafruitHatPWM => {
+                let val = CString::new("adafruit-hat-pwm").unwrap();
+                println!("HardwareMapping: {:?}", val);
+                val.as_ptr()
+            },
         }
     }
 }
@@ -34,12 +46,36 @@ pub enum RGBSequence {
 impl RGBSequence {
     fn to_string(&self) -> *const c_char {
         match self {
-            RGBSequence::RGB => CString::new("RGB").unwrap().as_ptr(),
-            RGBSequence::RBG => CString::new("RBG").unwrap().as_ptr(),
-            RGBSequence::GRB => CString::new("GRB").unwrap().as_ptr(),
-            RGBSequence::GBR => CString::new("GBR").unwrap().as_ptr(),
-            RGBSequence::BGR => CString::new("BGR").unwrap().as_ptr(),
-            RGBSequence::BRG => CString::new("BRG").unwrap().as_ptr(),
+            RGBSequence::RGB => {
+                let val = CString::new("RGB").unwrap();
+                println!("RGBSequence str: {:?}", val);
+                val.as_ptr()
+            },
+            RGBSequence::RBG => {
+                let val = CString::new("RBG").unwrap();
+                println!("RGBSequence str: {:?}", val);
+                val.as_ptr()
+            },
+            RGBSequence::GRB => {
+                let val = CString::new("GRB").unwrap();
+                println!("RGBSequence str: {:?}", val);
+                val.as_ptr()
+            },
+            RGBSequence::GBR => {
+                let val = CString::new("GBR").unwrap();
+                println!("RGBSequence str: {:?}", val);
+                val.as_ptr()
+            },
+            RGBSequence::BGR => {
+                let val = CString::new("BGR").unwrap();
+                println!("RGBSequence str: {:?}", val);
+                val.as_ptr()
+            },
+            RGBSequence::BRG => {
+                let val = CString::new("BRG").unwrap();
+                println!("RGBSequence str: {:?}", val);
+                val.as_ptr()
+            },
         }
     }
 }

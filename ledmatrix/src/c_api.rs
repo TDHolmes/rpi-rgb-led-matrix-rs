@@ -1,7 +1,5 @@
 extern crate libc;
 
-use std::env;
-use std::ffi::CString;
 use libc::{c_char, c_int};
 
 
