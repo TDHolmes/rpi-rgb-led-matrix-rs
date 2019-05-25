@@ -6,10 +6,17 @@ use ledmatrix::HardwareMapping::AdafruitHatPWM;
 
 
 fn main() {
+    let PANEL_ROWS: i32 = 16;
+    let PANEL_COLS: i32 = 32;
+    let NUM_PANELS: i32 = 2;
+
+    let ROWS: i32 = PANEL_ROWS * NUM_PANELS;
+    let COLS: i32 = 32;
+
     let options = LEDMatrixOptions::new(
         AdafruitHatPWM,
-        16, 32,
-        2, 0,
+        PANEL_ROWS, PANEL_COLS,
+        NUM_PANELS, 0,
         50
     );
 
@@ -18,39 +25,39 @@ fn main() {
     let mut aux_canvas = matrix.create_offscreen_canvas();
 
     while 1 == 1 {
-        for x in (0..32).step_by(2) {
+        for x in 1..=COLS {
             aux_canvas.clear();
             aux_canvas.draw_line(
-                x,      0,
-                32 - x, 16,
+                x,        0,
+                COLS - x, ROWS,
                 0x80, 0x80, 0x80);
             matrix.swap_canvas_on_vsync(&mut main_canvas, &mut aux_canvas);
             sleep(Duration::from_millis(50));
         }
-        for y in 0..16 {
+        for y in 1..=ROWS {
             aux_canvas.clear();
             aux_canvas.draw_line(
-                32, y,
-                0, 16 - y,
+                COLS, y,
+                0,    ROWS - y,
                 0x80, 0x80, 0x80);
             matrix.swap_canvas_on_vsync(&mut main_canvas, &mut aux_canvas);
             sleep(Duration::from_millis(50));
         }
 
-        for x in (0..32).step_by(2) {
+        for x in 1..=COLS {
             aux_canvas.clear();
             aux_canvas.draw_line(
-                32 - x, 16,
-                x,      0,
+                COLS - x, ROWS,
+                x,        0,
                 0x80, 0x80, 0x80);
             matrix.swap_canvas_on_vsync(&mut main_canvas, &mut aux_canvas);
             sleep(Duration::from_millis(50));
         }
-        for y in 0..16 {
+        for y in 1..=ROWS {
             aux_canvas.clear();
             aux_canvas.draw_line(
-                0, 16 - y,
-                32, y,
+                0,    ROWS - y,
+                COLS, y,
                 0x80, 0x80, 0x80);
             matrix.swap_canvas_on_vsync(&mut main_canvas, &mut aux_canvas);
             sleep(Duration::from_millis(50));
