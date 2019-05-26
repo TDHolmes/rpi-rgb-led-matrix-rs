@@ -291,8 +291,9 @@ pub struct Font {
 impl Font {
     pub fn new(bdf_filepath: &Path) -> Result<Font, &'static str> {
         // validate path
+        println!("Validating filepath: {:?}", bdf_filepath);
         if !bdf_filepath.ends_with(Path::new(".bdf")) {
-            return Err("Filepath does not appear to be a .bdf file!");
+            return Err("Given filepath does not appear to be a .bdf file!");
         }
         if !bdf_filepath.exists() {
             return Err("Filepath does not appear to exist!");
