@@ -256,9 +256,10 @@ impl Canvas {
         utf8_text: &str,
         kerning_offset: i32,
     ) {
-        let cstr = CString::new(utf8_text).unwrap().as_ptr();
+        let cstr = CString::new(utf8_text).unwrap().into_raw();
         unsafe {
             c_api::draw_text(self.canvas, font.font, x, y, r, g, b, cstr, kerning_offset);
+            let _ = CString::from_raw(cstr);  // free the raw string
         }
     }
 
@@ -273,9 +274,10 @@ impl Canvas {
         utf8_text: &str,
         kerning_offset: i32,
     ) {
-        let cstr = CString::new(utf8_text).unwrap().as_ptr();
+        let cstr = CString::new(utf8_text).unwrap().into_raw();
         unsafe {
             c_api::vertical_draw_text(self.canvas, font.font, x, y, r, g, b, cstr, kerning_offset);
+            let _ = CString::from_raw(cstr);  // free the raw string
         }
     }
 }
