@@ -33,8 +33,8 @@ fn main() {
             let (r, g, b) = (50, 50, 50);
 
             main_canvas.clear();
-            main_canvas.draw_text(&mut font, x, y, r, g, b, "Hello, World!", 1);
-            aux_canvas.vertical_draw_text(&mut font, 4, x*2 + COLS / 2, 25, 25, 25, "Goodbye", 1);
+            main_canvas.draw_text(&mut font, x, y, r, g, b, "Hello, World!", 0);
+            aux_canvas.vertical_draw_text(&mut font, 4, x*2 + COLS / 2, 25, 25, 25, "Goodbye", 0);
             matrix.swap_canvas_on_vsync(&mut main_canvas, &mut aux_canvas);
             sleep(Duration::from_millis(50));
         }
