@@ -292,11 +292,12 @@ pub struct Font {
 impl Font {
     pub fn new(bdf_filepath: &Path) -> Result<Font, &'static str> {
         // validate path
-        if !bdf_filepath.exists() {
+        let abs_path = bdf_filepath.canonicalize().unwrap();
+        if !abs_path.exists() {
             return Err("Filepath does not appear to exist!");
         }
 
-        if let Some(ext) = bdf_filepath.extension() {
+        if let Some(ext) = abs_path.extension() {
             if !(ext == ".bdf") {
                 return Err("Given filepath does not appear to be a .bdf file!");
             }
@@ -305,7 +306,7 @@ impl Font {
         }
 
         // make the object
-        let string = CString::new(bdf_filepath.to_str().unwrap()).unwrap();
+        let string = CString::new(abs_path.to_str().unwrap()).unwrap();
         unsafe {
             return Ok(Font {
                 font: c_api::load_font(string.as_ptr()),
