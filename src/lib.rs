@@ -5,7 +5,6 @@ extern crate libc;
 use libc::{c_char, c_int};
 use std::ffi::CString;
 use std::path::Path;
-use std::ffi::OsStr;
 
 pub const ARGV_MAX_SIZE: usize = 64;
 
@@ -300,6 +299,7 @@ impl Font {
         }
 
         if let Some(ext) = abs_path.extension() {
+            println!("Extension: {:?}", ext);
             if !(ext == ".bdf") {
                 return Err("Given filepath does not appear to be a .bdf file!");
             }
