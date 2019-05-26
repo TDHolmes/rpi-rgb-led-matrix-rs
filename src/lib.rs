@@ -291,15 +291,12 @@ pub struct Font {
 impl Font {
     pub fn new(bdf_filepath: &Path) -> Result<Font, &'static str> {
         // validate path
-        println!("Validating potentially relative path: {:?}", bdf_filepath);
         let abs_path = bdf_filepath.canonicalize().unwrap();
-        println!("Absolute version: {:?}", abs_path);
         if !abs_path.exists() {
             return Err("Filepath does not appear to exist!");
         }
 
         if let Some(ext) = abs_path.extension() {
-            println!("Extension: {:?}", ext);
             if !(ext == "bdf") {
                 return Err("Given filepath does not appear to be a .bdf file!");
             }
