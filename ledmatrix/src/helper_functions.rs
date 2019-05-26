@@ -17,8 +17,8 @@ pub fn get_c_argc_argv() -> (isize, *const*const c_char) {
             panic!("Too many command line options!");
         }
         argv[argc as usize] = CString::new(argument).unwrap().into_raw();
-        argc += 1;
         print_c_string(argv[argc as usize]);
+        argc += 1;
     }
 
     (argc, argv.as_ptr())
