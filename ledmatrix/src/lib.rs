@@ -6,6 +6,8 @@ use libc::{c_char, c_int};
 use std::ffi::CString;
 use std::path::Path;
 
+pub const ARGV_MAX_SIZE: usize = 64;
+
 pub enum HardwareMapping {
     Regular = 0,
     AdafruitHat = 1,
@@ -123,19 +125,22 @@ impl Matrix {
             various_bitfield_options: 0,
         };
 
-        let (argc, argv) = helper_functions::get_c_argc_argv();
+        // TODO: Try to make this not static size?
+        let mut argv: [*const c_char; ARGV_MAX_SIZE] = [0 as *const c_char; ARGV_MAX_SIZE];
+        let argc = helper_functions::get_c_argc_argv(&mut argv);
+        let argv_raw = argv.as_ptr() as *const*const c_char;
 
         unsafe {
             println!("Arguments:");
             for i in 0..argc {
-                let val: *const c_char = *argv.offset(i as isize);
+                let val: *const c_char = *argv_raw.offset(i as isize);
                 helper_functions::print_c_string(val);
             }
 
             let m = c_api::led_matrix_create_from_options(
                 &mut c_options,
                 &(argc as c_int),
-                &argv as *const*const*const c_char
+                &argv_raw as *const*const*const c_char
             );
 
             Matrix {

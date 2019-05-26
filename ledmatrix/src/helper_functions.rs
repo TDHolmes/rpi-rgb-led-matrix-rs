@@ -4,12 +4,10 @@ use std::env;
 use std::ffi::CString;
 use libc::c_char;
 
-const ARGV_MAX_SIZE: usize = 64;
+use super::ARGV_MAX_SIZE;  // TODO: DISGUSTING
 
 
-pub fn get_c_argc_argv() -> (isize, *const*const c_char) {
-    // TODO: make this argument parsing not fixed length.
-    let mut argv: [*const c_char; ARGV_MAX_SIZE] = [0 as *const c_char; ARGV_MAX_SIZE];
+pub fn get_c_argc_argv(argv: &mut [*const c_char; ARGV_MAX_SIZE]) -> isize {
     let mut argc: isize = 0;
 
     for argument in env::args() {
@@ -21,7 +19,7 @@ pub fn get_c_argc_argv() -> (isize, *const*const c_char) {
         argc += 1;
     }
 
-    (argc, argv.as_ptr())
+    argc
 }
 
 pub fn print_c_string(string_ptr: *const c_char) {
