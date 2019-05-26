@@ -15,7 +15,6 @@ pub fn get_c_argc_argv(argv: &mut [*const c_char; ARGV_MAX_SIZE]) -> isize {
             panic!("Too many command line options!");
         }
         argv[argc as usize] = CString::new(argument).unwrap().into_raw();
-        print_c_string(argv[argc as usize]);
         argc += 1;
     }
 
@@ -24,8 +23,7 @@ pub fn get_c_argc_argv(argv: &mut [*const c_char; ARGV_MAX_SIZE]) -> isize {
 
 pub fn print_c_string(string_ptr: *const c_char) {
     if string_ptr == 0 as *const c_char {
-        println!("ERROR: String given to print_c_string is NULL");
-        return;
+        panic!("ERROR: String given to print_c_string is NULL");
     }
 
     print!("'");
