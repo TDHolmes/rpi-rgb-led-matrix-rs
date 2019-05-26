@@ -1,7 +1,9 @@
-[workspace]
+[package]
+name = "ledmatrix"
+version = "0.1.0"
+authors = ["Tyler Holmes <tylerdanielholmes@gmail.com>"]
+edition = "2018"
+build = "build.rs"
 
-
-members = [
-    "ledmatrix",
-    "ledmatrix-example",
-]
+[dependencies]
+libc = "0.2"
