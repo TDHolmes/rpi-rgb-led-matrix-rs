@@ -28,7 +28,7 @@ fn main() {
     let mut font = Font::new(font_path_buf.as_path()).unwrap();
 
     loop {
-        for x in -COLS..COLS {
+        for x in -3*COLS..COLS*2 {
             let y = 8;
             let (r, g, b) = (50, 50, 50);
 
