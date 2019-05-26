@@ -23,7 +23,7 @@ fn main() {
     let mut matrix = Matrix::new_from_options(&options);
     let mut main_canvas = matrix.get_canvas();
     let mut aux_canvas = matrix.create_offscreen_canvas();
-    let file_path = Path::new(file!());
+    let file_path = Path::new(file!()).parent().unwrap();
     let font_path_buf = file_path.join(Path::new("../rpi-rgb-led-matrix/fonts/5x8.bdf"));
     let mut font = Font::new(font_path_buf.as_path()).unwrap();
 
