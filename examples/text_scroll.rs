@@ -35,7 +35,7 @@ fn main() {
             aux_canvas.clear();
             aux_canvas.draw_text(&mut font, x, y, r, g, b, "Hello, World!", 1);
             aux_canvas.vertical_draw_text(&mut font, 4, x, 25, 25, 25, "Goodbye", 1);
-            matrix.swap_canvas_on_vsync(&mut aux_canvas, &mut main_canvas);
+            matrix.swap_canvas_on_vsync(&mut main_canvas, &mut aux_canvas);
             sleep(Duration::from_millis(50));
         }
     }
