@@ -5,6 +5,7 @@ extern crate libc;
 use libc::{c_char, c_int};
 use std::ffi::CString;
 use std::path::Path;
+use std::ffi::OsStr;
 
 pub const ARGV_MAX_SIZE: usize = 64;
 
@@ -291,12 +292,16 @@ pub struct Font {
 impl Font {
     pub fn new(bdf_filepath: &Path) -> Result<Font, &'static str> {
         // validate path
-        println!("Validating filepath: {:?}", bdf_filepath);
-        if !bdf_filepath.ends_with(Path::new(".bdf")) {
-            return Err("Given filepath does not appear to be a .bdf file!");
-        }
         if !bdf_filepath.exists() {
             return Err("Filepath does not appear to exist!");
+        }
+
+        if let Some(ext) = bdf_filepath.extension() {
+            if !(ext == ".bdf") {
+                return Err("Given filepath does not appear to be a .bdf file!");
+            }
+        } else {
+            return Err("Given filepath doesn't even have a file extension!");
         }
 
         // make the object
