@@ -22,20 +22,20 @@ fn main() {
 
     let mut matrix = Matrix::new_from_options(&options);
     let mut main_canvas = matrix.get_canvas();
-    // let mut aux_canvas = matrix.create_offscreen_canvas();
+    let mut aux_canvas = matrix.create_offscreen_canvas();
     let file_path = Path::new(file!()).parent().unwrap();
     let font_path_buf = file_path.join(Path::new("../rpi-rgb-led-matrix/fonts/5x8.bdf"));
     let mut font = Font::new(font_path_buf.as_path()).unwrap();
 
     loop {
-        for x in 0..COLS {
+        for x in -COLS..COLS {
             let y = 8;
             let (r, g, b) = (50, 50, 50);
 
             main_canvas.clear();
             main_canvas.draw_text(&mut font, x, y, r, g, b, "Hello, World!", 1);
-            // aux_canvas.vertical_draw_text(&mut font, 4, x, 25, 25, 25, "Goodbye", 1);
-            // matrix.swap_canvas_on_vsync(&mut main_canvas, &mut aux_canvas);
+            aux_canvas.vertical_draw_text(&mut font, 4, x*2 + COLS / 2, 25, 25, 25, "Goodbye", 1);
+            matrix.swap_canvas_on_vsync(&mut main_canvas, &mut aux_canvas);
             sleep(Duration::from_millis(50));
         }
     }
