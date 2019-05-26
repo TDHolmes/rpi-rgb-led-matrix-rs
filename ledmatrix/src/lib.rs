@@ -129,14 +129,7 @@ impl Matrix {
             println!("Arguments:");
             for i in 0..argc {
                 let val: *const c_char = *argv.offset(i as isize);
-                let mut offs = 0;
-
-                print!("\t@{:?} - '", val);
-                while *val.offset(offs) != 0 {
-                    print!("{}", *val.offset(offs) as u8 as char);
-                    offs += 1;
-                }
-                println!("'");
+                helper_functions::print_c_string(val);
             }
 
             let m = c_api::led_matrix_create_from_options(
