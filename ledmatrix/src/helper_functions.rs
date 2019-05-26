@@ -7,16 +7,16 @@ use libc::c_char;
 const ARGV_MAX_SIZE: usize = 64;
 
 
-pub fn get_c_argc_argv() -> (usize, *const*const c_char) {
+pub fn get_c_argc_argv() -> (isize, *const*const c_char) {
     // TODO: make this argument parsing not fixed length.
     let mut argv: [*const c_char; ARGV_MAX_SIZE] = [0 as *const c_char; ARGV_MAX_SIZE];
-    let mut argc = 0;
+    let mut argc: isize = 0;
 
     for argument in env::args() {
-        if argc >= ARGV_MAX_SIZE {
+        if argc >= ARGV_MAX_SIZE as isize {
             panic!("Too many command line options!");
         }
-        argv[argc] = CString::new(argument).unwrap().into_raw();
+        argv[argc as usize] = CString::new(argument).unwrap().into_raw();
         argc += 1;
     }
 

@@ -312,17 +312,17 @@ impl Drop for Font {
 }
 
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
 
-    #[test]
-    fn c_args() {
-        let (argc, argv) = helper_functions::get_c_argc_argv();
-        unsafe {
-            for i in 0..argc {
-                println!("{:?}", *argv[i as usize]);
-            }
-        }
-    }
-}
+//     #[test]
+//     fn c_args() {
+//         let (argc, argv) = helper_functions::get_c_argc_argv();
+//         unsafe {
+//             for i in 0..argc {
+//                 println!("{:?}", *argv[i as usize]);
+//             }
+//         }
+//     }
+// }

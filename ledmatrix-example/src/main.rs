@@ -6,12 +6,12 @@ use ledmatrix::HardwareMapping::AdafruitHatPWM;
 
 
 fn main() {
-    let PANEL_ROWS: i32 = 16;
-    let PANEL_COLS: i32 = 32;
-    let NUM_PANELS: i32 = 2;
+    const PANEL_ROWS: i32 = 16;
+    const PANEL_COLS: i32 = 32;
+    const NUM_PANELS: i32 = 2;
 
-    let ROWS: i32 = PANEL_ROWS * NUM_PANELS;
-    let COLS: i32 = 32;
+    const ROWS: i32 = PANEL_ROWS * NUM_PANELS;
+    const COLS: i32 = 32;
 
     let options = LEDMatrixOptions::new(
         AdafruitHatPWM,
