@@ -300,7 +300,7 @@ impl Font {
 
         if let Some(ext) = abs_path.extension() {
             println!("Extension: {:?}", ext);
-            if !(ext == ".bdf") {
+            if !(ext == "bdf") {
                 return Err("Given filepath does not appear to be a .bdf file!");
             }
         } else {
