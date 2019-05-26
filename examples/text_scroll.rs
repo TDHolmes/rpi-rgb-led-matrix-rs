@@ -29,7 +29,7 @@ fn main() {
 
     loop {
         for x in 0..COLS {
-            let y = 1;
+            let y = 8;
             let (r, g, b) = (50, 50, 50);
 
             aux_canvas.clear();
