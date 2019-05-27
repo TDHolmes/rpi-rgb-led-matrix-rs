@@ -2,8 +2,9 @@ use std::thread::sleep;
 use std::time::Duration;
 use std::path::Path;
 
-use ledmatrix::{Matrix, LEDMatrixOptions, Font};
-use ledmatrix::HardwareMapping::AdafruitHatPWM;
+use ledmatrix::matrix::{Matrix, LEDMatrixOptions};
+use ledmatrix::canvas::Font;
+use ledmatrix::matrix::HardwareMapping::AdafruitHatPWM;
 
 
 fn main() {

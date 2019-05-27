@@ -1,8 +1,8 @@
 use std::thread::sleep;
 use std::time::Duration;
 
-use ledmatrix::{Matrix, LEDMatrixOptions};
-use ledmatrix::HardwareMapping::AdafruitHatPWM;
+use ledmatrix::matrix::{Matrix, LEDMatrixOptions};
+use ledmatrix::matrix::HardwareMapping::AdafruitHatPWM;
 
 
 fn main() {
