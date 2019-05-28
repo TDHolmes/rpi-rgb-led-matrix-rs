@@ -33,10 +33,10 @@ fn main() {
     p0.y = 0;
     p1.y = ROWS;
     while 1 == 1 {
-        for x in 1..=COLS {
+        for x in 0..COLS {
             // moves lines
             p0.x = x;
-            p1.x = COLS - x;
+            p1.x = COLS - 1 - x;
 
             // Draw and sleep
             aux_canvas.clear();
@@ -45,10 +45,10 @@ fn main() {
             sleep(Duration::from_millis(25));
         }
 
-        for y in 1..=ROWS {
+        for y in 0..ROWS {
             // moves lines
             p0.y = y;
-            p1.y = ROWS - y;
+            p1.y = ROWS - 1 - y;
 
             // Draw and sleep
             aux_canvas.clear();
@@ -57,9 +57,9 @@ fn main() {
             sleep(Duration::from_millis(25));
         }
 
-        for x in 1..=COLS {
+        for x in 0..COLS {
             // moves lines
-            p0.x = COLS - x;
+            p0.x = COLS - 1 - x;
             p1.x = x;
 
             // Draw and sleep
@@ -68,9 +68,9 @@ fn main() {
             matrix.swap_canvas_on_vsync(&mut main_canvas, &mut aux_canvas);
             sleep(Duration::from_millis(25));
         }
-        for y in 1..=ROWS {
+        for y in 0..ROWS {
             // moves lines
-            p0.y = ROWS - y;
+            p0.y = ROWS - 1 - y;
             p1.y = y;
 
             // Draw and sleep
