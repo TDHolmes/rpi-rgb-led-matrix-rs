@@ -33,7 +33,7 @@ fn main() {
     p0.y = 0;
     p1.y = ROWS;
     while 1 == 1 {
-        for x in 1..=matrix.options.cols {
+        for x in 1..=COLS {
             // moves lines
             p0.x = x;
             p1.x = COLS - x;
