@@ -176,9 +176,9 @@ impl Canvas {
         let xgap = rfpart(p0.x as f32 + 0.5);
         let xpxl1 = xend as i32; // this will be used in the main loop;
         let ypxl1 = yend.floor() as i32;
-        print!("({},{}) -> ", xpxl1, ypxl1);
         if steep {
             let pixel = PixelLocation{x: ypxl1, y: xpxl1};
+            print!("{} -> ", pixel);
             let _rgb = rgb.map(|px| (px as f32 * rfpart(yend) * xgap) as u8);
             self.set_pixel(&pixel, &_rgb);
 
@@ -202,9 +202,9 @@ impl Canvas {
         let xgap = fpart(p1.x as f32 + 0.5);
         let xpxl2 = xend as i32;         // this will be used in the main loop;
         let ypxl2 = yend.floor() as i32;
-        println!("({},{})", xpxl2, ypxl2);
         if steep {
             let pixel = PixelLocation{x: ypxl2, y: xpxl2};
+            println!("{}", pixel);
             let _rgb = rgb.map(|px| (px as f32 * rfpart(yend) * xgap) as u8);
             self.set_pixel(&pixel, &_rgb);
 
@@ -227,6 +227,7 @@ impl Canvas {
             for x in xpxl1 + 1..xpxl2 - 1 {
                 pix.y = x;
                 pix.x = intery.floor() as i32;
+                println!("\t{}", pix);
                 self.set_pixel(&pix, &rgb.map(|pix| ((pix as f32) * rfpart(intery)) as u8));
 
                 pix.x = (intery.floor() as i32) + 1;
@@ -237,6 +238,7 @@ impl Canvas {
             for x in xpxl1 + 1..xpxl2 - 1 {
                 pix.x = x;
                 pix.y = intery.floor() as i32;
+                println!("\t{}", pix);
                 self.set_pixel(&pix, &rgb.map(|pix| ((pix as f32) * rfpart(intery)) as u8));
 
                 pix.y = (intery.floor() as i32) + 1;
