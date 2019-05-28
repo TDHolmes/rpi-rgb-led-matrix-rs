@@ -187,6 +187,7 @@ impl Canvas {
             self.set_pixel(&pixel, &_rgb);
         } else {
             let pixel = PixelLocation{x: xpxl1, y: ypxl1};
+            print!("{} -> ", pixel);
             let _rgb = rgb.map(|px| (px as f32 * rfpart(yend) * xgap) as u8);
             self.set_pixel(&pixel, &_rgb);
 
@@ -213,6 +214,7 @@ impl Canvas {
             self.set_pixel(&pixel, &_rgb);
         } else {
             let pixel = PixelLocation{x: xpxl2, y: ypxl2};
+            println!("{}", pixel);
             let _rgb = rgb.map(|px| (px as f32 * rfpart(yend) * xgap) as u8);
             self.set_pixel(&pixel, &_rgb);
 
@@ -224,7 +226,7 @@ impl Canvas {
         // main loop
         let mut pix = PixelLocation{ x: 0, y: 0 };
         if steep {
-            for x in xpxl1 + 1..xpxl2 - 1 {
+            for x in (xpxl1 + 1)..(xpxl2 - 1) {
                 pix.y = x;
                 pix.x = intery.floor() as i32;
                 println!("\t{}", pix);
@@ -235,7 +237,7 @@ impl Canvas {
                 intery = intery + gradient;
             }
         } else {
-            for x in xpxl1 + 1..xpxl2 - 1 {
+            for x in (xpxl1 + 1)..(xpxl2 - 1) {
                 pix.x = x;
                 pix.y = intery.floor() as i32;
                 println!("\t{}", pix);
@@ -314,6 +316,6 @@ impl PixelLocation {
 
 impl std::fmt::Display for PixelLocation {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "({:3}, {:3})", self.x, self.y)
+        write!(f, "({:<3}, {:3<})", self.x, self.y)
     }
 }
