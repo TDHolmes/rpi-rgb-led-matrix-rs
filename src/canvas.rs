@@ -4,7 +4,8 @@ use super::c_datatypes;
 use std::path::Path;
 use libc::c_int;
 use std::ffi::CString;
-use rgb::RGB8;
+
+use rgb::*;
 
 
 /*
@@ -112,6 +113,135 @@ impl Canvas {
             let _ = CString::from_raw(cstr);  // free the raw string
         }
     }
+
+    pub fn draw_line_antialiased(&mut self, p0: &PixelLocation, p1: &PixelLocation, rgb: &RGB8) {
+        // integer part of x
+        fn ipart(x: f32) -> f32 {
+            x.floor()
+        }
+
+        fn round(x: f32) -> f32 {
+            ipart(x + 0.5)
+        }
+
+        // fractional part of x
+        fn fpart(x: f32) -> f32 {
+            x - x.floor()
+        }
+
+        fn rfpart(x: f32) -> f32 {
+            1.0 - fpart(x)
+        }
+
+        let mut p0: PixelLocation = p0.clone();
+        let mut p1: PixelLocation = p1.clone();
+        let mut pswap = PixelLocation{x: 0, y: 0};
+
+        let steep = (p1.y - p0.y).abs() > (p1.x - p0.x).abs();
+
+        if steep {
+            // swap p0 x & y
+            pswap.x = p0.x;
+            p0.x = p0.y;
+            p0.y = pswap.x;
+
+            // swap p1 x & y
+            pswap.x = p1.x;
+            p1.x = p1.y;
+            p1.y = pswap.x;
+        }
+        if p0.x > p1.x {
+            // swap x cords for p0 and p1
+            pswap.x = p0.x;
+            p0.x = p1.x;
+            p0.x = pswap.x;
+
+            // swap y cords for p0 and p1
+            pswap.y = p0.y;
+            p0.y = p1.y;
+            p0.y = pswap.y;
+        }
+
+        let dx = (p1.x - p0.x) as f32;
+        let dy = (p1.y - p0.y) as f32;
+        let mut gradient = dy / dx;
+        if dx == 0.0 {
+            gradient = 1.0;
+        }
+
+        // handle first endpoint
+        let xend = round(p0.x as f32);
+        let yend = p0.y as f32 + gradient * (xend - p0.x as f32);
+        let xgap = rfpart(p0.x as f32 + 0.5);
+        let xpxl1 = xend as i32; // this will be used in the main loop;
+        let ypxl1 = yend.floor() as i32;
+        if steep {
+            let pixel = PixelLocation{x: ypxl1, y: xpxl1};
+            let _rgb = rgb.map(|px| (px as f32 * rfpart(yend) * xgap) as u8);
+            self.set_pixel(&pixel, &_rgb);
+
+            let pixel = PixelLocation{x: ypxl1 + 1, y: xpxl1};
+            let _rgb = rgb.map(|px| (px as f32 * fpart(yend) * xgap) as u8);
+            self.set_pixel(&pixel, &_rgb);
+        } else {
+            let pixel = PixelLocation{x: xpxl1, y: ypxl1};
+            let _rgb = rgb.map(|px| (px as f32 * rfpart(yend) * xgap) as u8);
+            self.set_pixel(&pixel, &_rgb);
+
+            let pixel = PixelLocation{x: xpxl1, y: ypxl1 + 1};
+            let _rgb = rgb.map(|px| (px as f32 * fpart(yend) * xgap) as u8);
+            self.set_pixel(&pixel, &_rgb);
+        }
+        let mut intery = yend + gradient; // first y-intersection for the main loop;
+
+        // handle second endpoint
+        let xend = p1.x as f32;
+        let yend = p1.y as f32 + gradient * (xend - p1.x as f32);
+        let xgap = fpart(p1.x as f32 + 0.5);
+        let xpxl2 = xend as i32;         // this will be used in the main loop;
+        let ypxl2 = yend.floor() as i32;
+        if steep {
+            let pixel = PixelLocation{x: ypxl2, y: xpxl2};
+            let _rgb = rgb.map(|px| (px as f32 * rfpart(yend) * xgap) as u8);
+            self.set_pixel(&pixel, &_rgb);
+
+            let pixel = PixelLocation{x: ypxl2 + 1, y: xpxl2};
+            let _rgb = rgb.map(|px| (px as f32 * fpart(yend) * xgap) as u8);
+            self.set_pixel(&pixel, &_rgb);
+        } else {
+            let pixel = PixelLocation{x: xpxl2, y: ypxl2};
+            let _rgb = rgb.map(|px| (px as f32 * rfpart(yend) * xgap) as u8);
+            self.set_pixel(&pixel, &_rgb);
+
+            let pixel = PixelLocation{x: xpxl2, y: ypxl2 + 1};
+            let _rgb = rgb.map(|px| (px as f32 * fpart(yend) * xgap) as u8);
+            self.set_pixel(&pixel, &_rgb);
+        }
+
+        // main loop
+        let mut pix = PixelLocation{ x: 0, y: 0 };
+        if steep {
+            for x in xpxl1 + 1..xpxl2 - 1 {
+                pix.x = x;
+                pix.x = intery.floor() as i32;
+                self.set_pixel(&pix, &rgb.map(|pix| ((pix as f32) * rfpart(intery)) as u8));
+
+                pix.x = (intery.floor() as i32) + 1;
+                self.set_pixel(&pix, &rgb.map(|pix| ((pix as f32) * fpart(intery)) as u8));
+                intery = intery + gradient;
+            }
+        } else {
+            for x in xpxl1 + 1..xpxl2 - 1 {
+                pix.x = x;
+                pix.y = intery.floor() as i32;
+                self.set_pixel(&pix, &rgb.map(|pix| ((pix as f32) * rfpart(intery)) as u8));
+
+                pix.y = (intery.floor() as i32) + 1;
+                self.set_pixel(&pix, &rgb.map(|pix| ((pix as f32) * fpart(intery)) as u8));
+                intery = intery + gradient;
+            }
+        }
+    }
 }
 
 /*
@@ -160,6 +290,7 @@ impl Drop for Font {
  * Pixel Location
  */
 
+#[derive(Copy, Clone)]
 pub struct PixelLocation {
     pub x: i32,
     pub y: i32,

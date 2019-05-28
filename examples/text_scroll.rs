@@ -42,6 +42,7 @@ fn main() {
             main_canvas.draw_text(&mut font, &hello_pos, &rgb_hello, "Hello, World!", 0);
             aux_canvas.vertical_draw_text(&mut font, &goodbye_pos, &rgb_goodbye, "Goodbye", 0);
             matrix.swap_canvas_on_vsync(&mut main_canvas, &mut aux_canvas);
+            sleep(Duration::from_millis(5));
         }
     }
 }
