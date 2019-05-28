@@ -114,7 +114,7 @@ impl Canvas {
         }
     }
 
-    pub fn draw_line_antialiased(&mut self, p0: &PixelLocation, p1: &PixelLocation, rgb: &RGB8) {
+    pub fn draw_line_antialiased(&mut self, pp0: &PixelLocation, pp1: &PixelLocation, rgb: &RGB8) {
         // integer part of x
         fn ipart(x: f32) -> f32 {
             x.floor()
@@ -133,20 +133,20 @@ impl Canvas {
             1.0 - fpart(x)
         }
 
-        let mut p0: PixelLocation = p0.clone();
-        let mut p1: PixelLocation = p1.clone();
+        let mut p0: PixelLocation = pp0.clone();
+        let mut p1: PixelLocation = pp1.clone();
         let mut pswap = PixelLocation{x: 0, y: 0};
 
-        let steep = (p1.y - p0.y).abs() > (p1.x - p0.x).abs();
+        let steep = (p1.y as f32 - p0.y as f32).abs() > (p1.x as f32 - p0.x as f32).abs();
 
         if steep {
             println!("Steep line!");
-            // swap p0 x & y
+            // swap x & y on p0
             pswap.x = p0.x;
             p0.x = p0.y;
             p0.y = pswap.x;
 
-            // swap p1 x & y
+            // swap x & y on p1
             pswap.x = p1.x;
             p1.x = p1.y;
             p1.y = pswap.x;
@@ -156,12 +156,12 @@ impl Canvas {
 
         if p0.x > p1.x {
             println!("Pixel swap!");
-            // swap x cords for p0 and p1
+            // swap x cords for p0 & p1
             pswap.x = p0.x;
             p0.x = p1.x;
             p0.x = pswap.x;
 
-            // swap y cords for p0 and p1
+            // swap y cords for p0 & p1
             pswap.y = p0.y;
             p0.y = p1.y;
             p0.y = pswap.y;
