@@ -140,6 +140,7 @@ impl Canvas {
         let steep = (p1.y - p0.y).abs() > (p1.x - p0.x).abs();
 
         if steep {
+            println!("Steep line!");
             // swap p0 x & y
             pswap.x = p0.x;
             p0.x = p0.y;
@@ -149,8 +150,12 @@ impl Canvas {
             pswap.x = p1.x;
             p1.x = p1.y;
             p1.y = pswap.x;
+        } else {
+            println!("Shallow line!");
         }
+
         if p0.x > p1.x {
+            println!("Pixel swap!");
             // swap x cords for p0 and p1
             pswap.x = p0.x;
             p0.x = p1.x;
@@ -160,6 +165,8 @@ impl Canvas {
             pswap.y = p0.y;
             p0.y = p1.y;
             p0.y = pswap.y;
+        } else {
+            println!("NO swap!");
         }
 
         let dx = (p1.x - p0.x) as f32;
