@@ -225,7 +225,7 @@ impl Canvas {
         let mut pix = PixelLocation{ x: 0, y: 0 };
         if steep {
             for x in xpxl1 + 1..xpxl2 - 1 {
-                pix.x = x;
+                pix.y = x;
                 pix.x = intery.floor() as i32;
                 self.set_pixel(&pix, &rgb.map(|pix| ((pix as f32) * rfpart(intery)) as u8));
 
