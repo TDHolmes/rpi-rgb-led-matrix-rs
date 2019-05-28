@@ -140,7 +140,6 @@ impl Canvas {
         let steep = (p1.y as f32 - p0.y as f32).abs() > (p1.x as f32 - p0.x as f32).abs();
 
         if steep {
-            println!("Steep line!");
             // swap x & y on p0
             pswap.x = p0.x;
             p0.x = p0.y;
@@ -150,12 +149,9 @@ impl Canvas {
             pswap.x = p1.x;
             p1.x = p1.y;
             p1.y = pswap.x;
-        } else {
-            println!("Shallow line!");
         }
 
         if p0.x > p1.x {
-            println!("Pixel swap!");
             // swap x cords for p0 & p1
             pswap.x = p0.x;
             p0.x = p1.x;
@@ -165,8 +161,6 @@ impl Canvas {
             pswap.y = p0.y;
             p0.y = p1.y;
             p0.y = pswap.y;
-        } else {
-            println!("NO swap!");
         }
 
         let dx = (p1.x - p0.x) as f32;
@@ -182,6 +176,7 @@ impl Canvas {
         let xgap = rfpart(p0.x as f32 + 0.5);
         let xpxl1 = xend as i32; // this will be used in the main loop;
         let ypxl1 = yend.floor() as i32;
+        print!("({},{}) -> ", xpxl1, ypxl1);
         if steep {
             let pixel = PixelLocation{x: ypxl1, y: xpxl1};
             let _rgb = rgb.map(|px| (px as f32 * rfpart(yend) * xgap) as u8);
@@ -207,6 +202,7 @@ impl Canvas {
         let xgap = fpart(p1.x as f32 + 0.5);
         let xpxl2 = xend as i32;         // this will be used in the main loop;
         let ypxl2 = yend.floor() as i32;
+        println!("({},{})", xpxl2, ypxl2);
         if steep {
             let pixel = PixelLocation{x: ypxl2, y: xpxl2};
             let _rgb = rgb.map(|px| (px as f32 * rfpart(yend) * xgap) as u8);
