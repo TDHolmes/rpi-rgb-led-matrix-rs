@@ -4,6 +4,7 @@ use super::c_datatypes;
 use std::path::Path;
 use libc::c_int;
 use std::ffi::CString;
+use rgb::RGB8;
 
 
 /*
@@ -19,15 +20,17 @@ impl Canvas {
         Canvas { canvas: canvas_ref }
     }
 
+    /// Gets the total size of the canvas, taking into account the number
+    /// of parallel and series panels you have.
     pub fn get_size(&self) -> (i32, i32) {
-        let width: i32 = 0;
-        let height: i32 = 0;
+        let mut width: c_int = 0;
+        let mut height: c_int = 0;
 
         unsafe {
-            c_api::led_canvas_get_size(self.canvas, width as *mut c_int, height as *mut c_int);
+            c_api::led_canvas_get_size(self.canvas, &mut width as *mut c_int, &mut height as *mut c_int);
         }
 
-        return (width, height);
+        return (width as i32, height as i32);
     }
 
     pub fn clear(&mut self) {
@@ -36,44 +39,51 @@ impl Canvas {
         }
     }
 
-    pub fn fill(&mut self, r: u8, g: u8, b: u8) {
+    pub fn fill(&mut self, rgb: &RGB8) {
         unsafe {
-            c_api::led_canvas_fill(self.canvas, r, g, b);
+            c_api::led_canvas_fill(self.canvas, rgb.r, rgb.g, rgb.b);
         }
     }
 
-    pub fn set_pixel(&mut self, x: i32, y: i32, r: u8, g: u8, b: u8) {
+    pub fn set_pixel(&mut self, pixel: &PixelLocation, rgb: &RGB8) {
         unsafe {
-            c_api::led_canvas_set_pixel(self.canvas, x, y, r, g, b);
+            c_api::led_canvas_set_pixel(self.canvas, pixel.x, pixel.y, rgb.r, rgb.g, rgb.b);
         }
     }
 
-    pub fn draw_circle(&mut self, x: i32, y: i32, radius: i32, r: u8, g: u8, b: u8) {
+    pub fn draw_circle(&mut self, pixel: &PixelLocation, radius: i32, rgb: &RGB8) {
         unsafe {
-            c_api::draw_circle(self.canvas, x, y, radius, r, g, b);
+            c_api::draw_circle(self.canvas, pixel.x, pixel.y, radius, rgb.r, rgb.g, rgb.b);
         }
     }
 
-    pub fn draw_line(&mut self, x0: i32, y0: i32, x1: i32, y1: i32, r: u8, g: u8, b: u8) {
+    pub fn draw_line(&mut self, p0: &PixelLocation, p1: &PixelLocation, rgb: &RGB8) {
         unsafe {
-            c_api::draw_line(self.canvas, x0, y0, x1, y1, r, g, b);
+            c_api::draw_line(self.canvas, p0.x, p0.y, p1.x, p1.y, rgb.r, rgb.g, rgb.b);
         }
     }
 
     pub fn draw_text(
         &mut self,
         font: &mut Font,
-        x: i32,
-        y: i32,
-        r: u8,
-        g: u8,
-        b: u8,
+        pixel_start: &PixelLocation,
+        rgb: &RGB8,
         utf8_text: &str,
         kerning_offset: i32,
     ) {
         let cstr = CString::new(utf8_text).unwrap().into_raw();
         unsafe {
-            c_api::draw_text(self.canvas, font.font, x, y, r, g, b, cstr, kerning_offset);
+            c_api::draw_text(
+                self.canvas,
+                font.font,
+                pixel_start.x,
+                pixel_start.y,
+                rgb.r,
+                rgb.g,
+                rgb.b,
+                cstr,
+                kerning_offset
+            );
             let _ = CString::from_raw(cstr);  // free the raw string
         }
     }
@@ -81,17 +91,24 @@ impl Canvas {
     pub fn vertical_draw_text(
         &mut self,
         font: &mut Font,
-        x: i32,
-        y: i32,
-        r: u8,
-        g: u8,
-        b: u8,
+        pixel_start: &PixelLocation,
+        rgb: &RGB8,
         utf8_text: &str,
         kerning_offset: i32,
     ) {
         let cstr = CString::new(utf8_text).unwrap().into_raw();
         unsafe {
-            c_api::vertical_draw_text(self.canvas, font.font, x, y, r, g, b, cstr, kerning_offset);
+            c_api::vertical_draw_text(
+                self.canvas,
+                font.font,
+                pixel_start.x,
+                pixel_start.y,
+                rgb.r,
+                rgb.g,
+                rgb.b,
+                cstr,
+                kerning_offset
+            );
             let _ = CString::from_raw(cstr);  // free the raw string
         }
     }
@@ -135,6 +152,26 @@ impl Drop for Font {
     fn drop(&mut self) {
         unsafe {
             c_api::delete_font(self.font);
+        }
+    }
+}
+
+/*
+ * Pixel Location
+ */
+
+pub struct PixelLocation {
+    pub x: i32,
+    pub y: i32,
+}
+
+impl PixelLocation {
+    pub fn from_relative(x: f32, y: f32, canvas: &Canvas) -> PixelLocation {
+        let (xsize, ysize) = canvas.get_size();
+
+        PixelLocation {
+            x: (xsize as f32 * x) as i32,
+            y: (ysize as f32 * y) as i32,
         }
     }
 }

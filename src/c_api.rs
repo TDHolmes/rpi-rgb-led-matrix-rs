@@ -6,7 +6,8 @@ use super::c_datatypes::*;
 
 #[link(name = "rgbmatrix")]
 extern "C" {
-    // matrix functions
+
+    // --- matrix functions --- //
 
     pub(crate) fn led_matrix_create_from_options(
         options: *mut LEDMatrixOptions,
@@ -20,16 +21,14 @@ extern "C" {
     pub(crate) fn led_matrix_get_brightness(matrix: *mut RGBLedMatrix) -> u8;
     pub(crate) fn led_matrix_set_brightness(matrix: *mut RGBLedMatrix, brightness: u8);
 
-    // get canvas from matrix
     pub(crate) fn led_matrix_get_canvas(matrix: *mut RGBLedMatrix) -> *mut LedCanvas;
     pub(crate) fn led_matrix_create_offscreen_canvas(matrix: *mut RGBLedMatrix) -> *mut LedCanvas;
-    // double buffer swap of canvas
     pub(crate) fn led_matrix_swap_on_vsync(
         matrix: *mut RGBLedMatrix,
         canvas: *mut LedCanvas,
     ) -> *mut LedCanvas;
 
-    // canvas functions
+    // --- canvas functions --- //
 
     pub(crate) fn led_canvas_get_size(canvas: *const LedCanvas, width: *mut c_int, height: *mut c_int);
     pub(crate) fn led_canvas_set_pixel(canvas: *mut LedCanvas, x: c_int, y: c_int, r: u8, g: u8, b: u8);
@@ -72,7 +71,7 @@ extern "C" {
         b: u8,
     );
 
-    // other
+    // --- other --- //
 
     pub(crate) fn load_font(bdf_font_file: *const c_char) -> *mut LedFont;
     pub(crate) fn delete_font(font: *mut LedFont);
