@@ -309,3 +309,9 @@ impl PixelLocation {
         }
     }
 }
+
+impl std::fmt::Display for PixelLocation {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "({:3}, {:3})", self.x, self.y)
+    }
+}
